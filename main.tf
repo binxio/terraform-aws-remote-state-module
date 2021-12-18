@@ -86,7 +86,6 @@ resource "aws_s3_bucket" "remote_replica_state_bucket" {
 
 ################################################################################
 # DynamoDB Table
-# See: https://www.terraform.io/docs/backends/types/s3.html#dynamodb_table
 ################################################################################
 
 resource "aws_dynamodb_table" "dynamodb_table" {
