@@ -4,6 +4,6 @@ terraform {
   required_providers {
     aws = ">= 3.66"
 
-    configuration_aliases = [aws.replica]
+    configuration_aliases = ["aws.replica"]
   }
 }
