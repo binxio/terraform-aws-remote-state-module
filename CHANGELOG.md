@@ -30,4 +30,4 @@ All notable changes to this project will be documented in this file.
   - Initial commit
   
   
-[Unreleased]: https://github.com/bschaatsbergen/terraform-aws-alb-module/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/binxio/terraform-aws-remote-state-module/compare/v0.1.0...HEAD

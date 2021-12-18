@@ -56,4 +56,4 @@ Module managed by [Bruno Schaatsbergen](https://github.com/bschaatsbergen).
 
 ## License
 
-Apache 2 Licensed. See [LICENSE](https://github.com/bschaatsbergen/terraform-aws-alb-module/tree/main/LICENSE).
+Apache 2 Licensed. See [LICENSE](https://github.com/binxio/terraform-aws-remote-state-module/tree/main/LICENSE).
