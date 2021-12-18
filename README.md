@@ -1,4 +1,4 @@
-# Terraform AWS ALB module
+# Terraform AWS Remote Backend module
 
 This module is still under development.
 
