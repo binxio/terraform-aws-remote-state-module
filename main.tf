@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "log_bucket" {
 }
 
 resource "aws_s3_bucket" "replica_log_bucket" {
-  bucket = "${var.bucket_name}-access-logs"
+  bucket = "${var.bucket_name}-replica-access-logs"
   acl    = "log-delivery-write"
   provider      = aws.replica
 }
