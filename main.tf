@@ -7,6 +7,12 @@ resource "aws_s3_bucket" "log_bucket" {
   acl    = "log-delivery-write"
 }
 
+resource "aws_s3_bucket" "replica_log_bucket" {
+  bucket = "${var.bucket_name}-access-logs"
+  acl    = "log-delivery-write"
+  provider      = aws.replica
+}
+
 resource "aws_s3_bucket" "remote_state_bucket" {
   bucket = var.bucket_name
   acl    = "private"
