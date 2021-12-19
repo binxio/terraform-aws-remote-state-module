@@ -82,7 +82,7 @@ resource "aws_s3_bucket" "remote_replica_state_bucket" {
   }
 
   logging {
-    target_bucket = aws_s3_bucket.log_bucket.id
+    target_bucket = aws_s3_bucket.replica_log_bucket.id
     target_prefix = "${var.bucket_name}/"
   }
 
