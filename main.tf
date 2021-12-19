@@ -31,16 +31,6 @@ resource "aws_s3_bucket" "remote_state_bucket" {
       destination {
         bucket        = aws_s3_bucket.remote_replica_state_bucket.arn
         storage_class = "STANDARD"
-
-        replication_time {
-          status  = "Enabled"
-          minutes = 15
-        }
-
-        metrics {
-          status  = "Enabled"
-          minutes = 15
-        }
       }
     }
   }
