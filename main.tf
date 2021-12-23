@@ -1,16 +1,12 @@
-################################################################################
-# S3 Buckets
-################################################################################
-
 resource "aws_s3_bucket" "log_bucket" {
   bucket = "${var.bucket_name}-access-logs"
   acl    = "log-delivery-write"
 }
 
 resource "aws_s3_bucket" "replica_log_bucket" {
-  bucket = "${var.bucket_name}-replica-access-logs"
-  acl    = "log-delivery-write"
-  provider      = aws.replica
+  bucket   = "${var.bucket_name}-replica-access-logs"
+  acl      = "log-delivery-write"
+  provider = aws.replica
 }
 
 resource "aws_s3_bucket" "remote_state_bucket" {
@@ -42,6 +38,7 @@ resource "aws_s3_bucket" "remote_state_bucket" {
       }
     }
   }
+
   logging {
     target_bucket = aws_s3_bucket.log_bucket.id
   }
@@ -73,10 +70,6 @@ resource "aws_s3_bucket" "remote_replica_state_bucket" {
   provider      = aws.replica
 }
 
-################################################################################
-# DynamoDB Table
-################################################################################
-
 resource "aws_dynamodb_table" "dynamodb_table" {
   name         = var.dynamodb_table_name
   billing_mode = "PAY_PER_REQUEST"
@@ -93,10 +86,6 @@ resource "aws_dynamodb_table" "dynamodb_table" {
 
   tags = local.tags
 }
-
-################################################################################
-# IAM
-################################################################################
 
 resource "aws_iam_role" "replication" {
   name = "${var.bucket_name}-replication-role"

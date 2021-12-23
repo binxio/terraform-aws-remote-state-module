@@ -7,5 +7,5 @@ variable "dynamodb_table_name" {
 }
 
 variable "tags" {
-  type = map
+  type = map(any)
 }

@@ -10,40 +10,34 @@ This module is still under development.
 
 ## Usage
 
-### Application Load balancer
+### Remote backend configuration
 
 ```hcl
+provider "aws" {
+  region  = "eu-central-1"
+}
+
+provider "aws" {
+  alias  = "replica"
+  region = "eu-west-1"
+}
+
+module "remote_backend" {
+  source              = "github.com/binxio/terraform-aws-remote-state-module"
+  bucket_name         = "a-remote-state-bucket"
+  dynamodb_table_name = "a-state-lock-table"
+  tags = {
+    "Key" = "Value"
+  }
+  providers = {
+    aws         = aws
+    aws.replica = aws.replica
+  }
+}
 ```
 
-## Examples
-
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-## Requirements
 
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.66 |
-
-## Providers
-
-No providers.
-
-## Modules
-
-No modules.
-
-## Resources
-
-No resources.
-
-## Inputs
-
-No inputs.
-
-## Outputs
-
-No outputs.
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Contributing
