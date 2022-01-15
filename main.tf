@@ -2,38 +2,6 @@ provider "aws" {
   alias = "replica"
 }
 
-resource "aws_s3_bucket" "remote_state_log_bucket" {
-  bucket = "${var.bucket_name}-access-logs"
-  acl    = "log-delivery-write"
-}
-
-resource "aws_s3_bucket_public_access_block" "remote_state_log_bucket" {
-  bucket = aws_s3_bucket.remote_state_log_bucket.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
-
-resource "aws_s3_bucket" "remote_replica_state_log_bucket" {
-  bucket = "${local.remote_replica_state_bucket_name}-access-logs"
-  acl    = "log-delivery-write"
-
-  provider = aws.replica
-}
-
-resource "aws_s3_bucket_public_access_block" "remote_replica_state_log_bucket" {
-  bucket = aws_s3_bucket.remote_replica_state_log_bucket.id
-
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-
-  provider = aws.replica
-}
-
 resource "aws_s3_bucket" "remote_state" {
   bucket = var.bucket_name
   acl    = "private"
@@ -118,10 +86,6 @@ POLICY
     }
   }
 
-  logging {
-    target_bucket = aws_s3_bucket.remote_state_log_bucket.id
-  }
-
   force_destroy = true
 }
 
@@ -202,10 +166,6 @@ POLICY
         sse_algorithm = "AES256"
       }
     }
-  }
-
-  logging {
-    target_bucket = aws_s3_bucket.remote_replica_state_log_bucket.id
   }
 
   force_destroy = true
