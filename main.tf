@@ -66,7 +66,7 @@ resource "aws_s3_bucket_public_access_block" "remote_state" {
 resource "aws_s3_bucket" "remote_replica_state" {
   bucket = "${var.bucket_name}-replica"
   acl    = "private"
-  policy = templatefile("s3-policy.json", { bucket_name = var.bucket_name })
+  policy = templatefile("${path.module}/s3-policy.json", { bucket_name = var.bucket_name })
 
   versioning {
     enabled = true
