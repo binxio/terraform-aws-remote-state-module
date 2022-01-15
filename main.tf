@@ -19,7 +19,7 @@ resource "aws_s3_bucket_public_access_block" "log_bucket" {
 resource "aws_s3_bucket" "remote_state" {
   bucket = var.bucket_name
   acl    = "private"
-  policy = templatefile("s3-policy.json", { bucket_name = var.bucket_name })
+  policy = templatefile("${path.module}/s3-policy.json", { bucket_name = var.bucket_name })
 
   versioning {
     enabled = true
