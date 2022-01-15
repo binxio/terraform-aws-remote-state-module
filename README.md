@@ -2,7 +2,7 @@
 
 Module that allows you to provision a cross-region remote backend for AWS.
 
-After running `terraform apply` add a `backend` to your `Terraform` block:
+After running `terraform apply` add a s3 `backend` as following:
 
 ```hcl
 terraform {
@@ -21,7 +21,6 @@ terraform {
 - S3 cross-region replication
 - Denies object deletion
 - Enforces encryption in transit and at rest
-- 
 
 ## Usage
 
