@@ -1,3 +1,7 @@
+provider "aws" {
+  alias = "replica"
+}
+
 resource "aws_s3_bucket" "log_bucket" {
   bucket = "${var.bucket_name}-access-logs"
   acl    = "log-delivery-write"
@@ -15,7 +19,50 @@ resource "aws_s3_bucket_public_access_block" "log_bucket" {
 resource "aws_s3_bucket" "remote_state" {
   bucket = var.bucket_name
   acl    = "private"
-  policy = templatefile("${path.module}/s3-policy.json", { bucket_name = var.bucket_name })
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Id": "TerraformStateBucketPolicy",
+  "Statement": [
+    {
+      "Sid": "DenyIncorrectEncryptionHeader",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${var.bucket_name}/*",
+      "Condition": {
+        "StringNotEquals": {
+          "s3:x-amz-server-side-encryption": "AES256"
+        }
+      }
+    },
+    {
+      "Sid": "DenyUnEncryptedObjectUploads",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${var.bucket_name}/*",
+      "Condition": {
+        "Null": {
+          "s3:x-amz-server-side-encryption": true
+        }
+      }
+    },
+    {
+      "Sid": "AllowSSLRequestsOnly",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:*",
+      "Resource": "arn:aws:s3:::${var.bucket_name}/*",
+      "Condition": {
+        "Bool": {
+          "aws:SecureTransport": "false"
+        }
+      }
+    }
+  ]
+}
+POLICY
 
   versioning {
     enabled = true
@@ -60,9 +107,52 @@ resource "aws_s3_bucket_public_access_block" "remote_state" {
 }
 
 resource "aws_s3_bucket" "remote_replica_state" {
-  bucket = "${var.bucket_name}-replica"
+  bucket = local.remote_replica_state_bucket_name
   acl    = "private"
-  policy = templatefile("${path.module}/s3-policy.json", { bucket_name = var.bucket_name })
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Id": "TerraformStateBucketPolicy",
+  "Statement": [
+    {
+      "Sid": "DenyIncorrectEncryptionHeader",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${local.remote_replica_state_bucket_name}/*",
+      "Condition": {
+        "StringNotEquals": {
+          "s3:x-amz-server-side-encryption": "AES256"
+        }
+      }
+    },
+    {
+      "Sid": "DenyUnEncryptedObjectUploads",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${local.remote_replica_state_bucket_name}/*",
+      "Condition": {
+        "Null": {
+          "s3:x-amz-server-side-encryption": true
+        }
+      }
+    },
+    {
+      "Sid": "AllowSSLRequestsOnly",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:*",
+      "Resource": "arn:aws:s3:::${local.remote_replica_state_bucket_name}/*",
+      "Condition": {
+        "Bool": {
+          "aws:SecureTransport": "false"
+        }
+      }
+    }
+  ]
+}
+POLICY
 
   versioning {
     enabled = true
