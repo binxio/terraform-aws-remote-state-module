@@ -2,18 +2,36 @@ provider "aws" {
   alias = "replica"
 }
 
-resource "aws_s3_bucket" "log_bucket" {
+resource "aws_s3_bucket" "remote_state_log_bucket" {
   bucket = "${var.bucket_name}-access-logs"
   acl    = "log-delivery-write"
 }
 
-resource "aws_s3_bucket_public_access_block" "log_bucket" {
-  bucket = aws_s3_bucket.log_bucket.id
+resource "aws_s3_bucket_public_access_block" "remote_state_log_bucket" {
+  bucket = aws_s3_bucket.remote_state_log_bucket.id
 
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket" "remote_replica_state_log_bucket" {
+  bucket = "${local.remote_replica_state_bucket_name}-access-logs"
+  acl    = "log-delivery-write"
+
+  provider = aws.replica
+}
+
+resource "aws_s3_bucket_public_access_block" "remote_replica_state_log_bucket" {
+  bucket = aws_s3_bucket.remote_replica_state_log_bucket.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+
+  provider = aws.replica
 }
 
 resource "aws_s3_bucket" "remote_state" {
@@ -59,6 +77,16 @@ resource "aws_s3_bucket" "remote_state" {
           "aws:SecureTransport": "false"
         }
       }
+    },
+    {
+      "Sid": "DenyObjectDeletion",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Resource": "arn:aws:s3:::${var.bucket_name}/*",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:DeleteObjectVersion"
+      ]
     }
   ]
 }
@@ -91,7 +119,7 @@ POLICY
   }
 
   logging {
-    target_bucket = aws_s3_bucket.log_bucket.id
+    target_bucket = aws_s3_bucket.remote_state_log_bucket.id
   }
 
   force_destroy = true
@@ -149,6 +177,16 @@ resource "aws_s3_bucket" "remote_replica_state" {
           "aws:SecureTransport": "false"
         }
       }
+    },
+    {
+      "Sid": "DenyObjectDeletion",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Resource": "arn:aws:s3:::${local.remote_replica_state_bucket_name}/*",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:DeleteObjectVersion"
+      ]
     }
   ]
 }
@@ -167,7 +205,7 @@ POLICY
   }
 
   logging {
-    target_bucket = aws_s3_bucket.log_bucket.id
+    target_bucket = aws_s3_bucket.remote_replica_state_log_bucket.id
   }
 
   force_destroy = true
@@ -181,6 +219,8 @@ resource "aws_s3_bucket_public_access_block" "remote_replica_state" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
+
+  provider = aws.replica
 }
 
 

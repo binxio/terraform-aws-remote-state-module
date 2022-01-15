@@ -1,8 +1,3 @@
-output "log_bucket_arn" {
-  value       = aws_s3_bucket.log_bucket.arn
-  description = "The ARN of the S3 access log bucket."
-}
-
 output "remote_state_bucket_arn" {
   value       = aws_s3_bucket.remote_state.arn
   description = "The ARN of the S3 remote state bucket."
