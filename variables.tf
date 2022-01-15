@@ -15,5 +15,6 @@ variable "dynamodb_table_name" {
 
 variable "tags" {
   type        = map(any)
+  default     = {}
   description = "A set of tags that should be attached to the resources."
 }

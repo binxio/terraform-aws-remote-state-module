@@ -76,7 +76,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | A name for the S3 bucket. | `string` | n/a | yes |
 | <a name="input_dynamodb_table_name"></a> [dynamodb\_table\_name](#input\_dynamodb\_table\_name) | A name for the DynamoDB table. | `string` | n/a | yes |
-| <a name="input_tags"></a> [tags](#input\_tags) | A set of tags that should be attached to the resources. | `map(any)` | n/a | yes |
+| <a name="input_tags"></a> [tags](#input\_tags) | A set of tags that should be attached to the resources. | `map(any)` | `{}` | no |
 
 ## Outputs
 
