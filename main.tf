@@ -1,7 +1,3 @@
-provider "aws" {
-  alias = "replica"
-}
-
 resource "aws_s3_bucket" "log_bucket" {
   bucket = "${var.bucket_name}-access-logs"
   acl    = "log-delivery-write"
