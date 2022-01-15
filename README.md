@@ -1,12 +1,27 @@
 # Terraform AWS Remote Backend module
 
-This module is still under development.
+Module that allows you to provision a cross-region remote backend for AWS.
+
+After running `terraform apply` add a `backend` to your `Terraform` block:
+
+```hcl
+terraform {
+  backend "s3" {
+    bucket         = "a-remote-state-bucket"
+    dynamodb_table = "a-state-lock-table"
+    key            = "my/terraform-state/key"
+    region         = "eu-west-1"
+    encrypt        = true
+  }
+}
+```
 
 ## Features
 
--
--
--
+- S3 cross-region replication
+- Denies object deletion
+- Enforces encryption in transit and at rest
+- 
 
 ## Usage
 
