@@ -10,7 +10,7 @@ Module that allows you to provision a cross-region remote backend for AWS.
 
 ## Usage
 
-Create a `.tf` file and copy paste the below code.
+Create a `main.tf` file and copy paste the below code.
 
 ```hcl
 provider "aws" {
