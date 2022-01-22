@@ -2,20 +2,6 @@
 
 Module that allows you to provision a cross-region remote backend for AWS.
 
-After running `terraform apply` add a s3 `backend` as following:
-
-```hcl
-terraform {
-  backend "s3" {
-    bucket         = "a-remote-state-bucket"
-    dynamodb_table = "a-state-lock-table"
-    key            = "my/terraform-state/key"
-    region         = "eu-west-1"
-    encrypt        = true
-  }
-}
-```
-
 ## Features
 
 - S3 cross-region replication
@@ -24,7 +10,7 @@ terraform {
 
 ## Usage
 
-### Remote backend configuration
+Create a `.tf` file and copy paste the below code.
 
 ```hcl
 provider "aws" {
@@ -38,8 +24,8 @@ provider "aws" {
 
 module "remote_backend" {
   source              = "github.com/binxio/terraform-aws-remote-state-module"
-  bucket_name         = "a-remote-state-bucket"
-  dynamodb_table_name = "a-state-lock-table"
+  bucket_name         = "my-remote-state-bucket"
+  dynamodb_table_name = "my-state-lock-table"
   tags = {
     "Key" = "Value"
   }
@@ -49,6 +35,28 @@ module "remote_backend" {
   }
 }
 ```
+
+Run `terraform plan` followed by `terraform apply`, this will create the S3 buckets and DynamodDB table.
+
+Time to migrate the `terraform.tfstate` file that's created locally.
+
+Create a `provider.tf` file and copy paste the below code.
+
+```
+terraform {
+  backend "s3" {
+    bucket         = "my-remote-state-bucket"
+    dynamodb_table = "my-state-lock-table"
+    key            = "your/state/path"
+    region         = "eu-central-1"
+    encrypt        = true
+  }
+}
+```
+
+Run `terraform init -migrate-state` followed by a `yes`, this will migrate the `terraform.tfstate` to the S3 bucket (remote backend).
+You can now safely remove the `terraform.tfstate` and `terraform.tfstate.backup`.
+
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
