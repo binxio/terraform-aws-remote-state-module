@@ -38,7 +38,7 @@ module "remote_backend" {
 
 Run `terraform plan` followed by `terraform apply`, this will create the S3 buckets and DynamodDB table.
 
-Time to migrate the `terraform.tfstate` file that's created locally.
+Once that's done we need to migrate the `terraform.tfstate` file that's created locally.
 
 Create a `provider.tf` file and copy paste the below code.
 
