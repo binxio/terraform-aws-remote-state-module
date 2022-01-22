@@ -54,7 +54,7 @@ terraform {
 }
 ```
 
-Run `terraform init -migrate-state` followed by a `yes`, this will migrate the `terraform.tfstate` to the S3 bucket (remote backend).
+Run `terraform init -migrate-state` followed by a `yes`, this will migrate the `terraform.tfstate` to the S3 bucket (*remote backend*).
 You can now safely remove the `terraform.tfstate` and `terraform.tfstate.backup`.
 
 
